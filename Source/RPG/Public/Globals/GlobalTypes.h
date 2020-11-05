@@ -12,7 +12,8 @@ enum class EPlayerPawnState : uint8
 	NONE,
 	GROUNDED,
 	FALLING,
-	JUMP
+	JUMP,
+	ROLL
 };
 /**
  * 

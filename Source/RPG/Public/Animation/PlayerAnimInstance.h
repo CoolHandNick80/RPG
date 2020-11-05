@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "Animation/AnimMontage.h"
 #include "PlayerAnimInstance.generated.h"
 
 class APlayerPawn;
@@ -28,6 +29,14 @@ public:
 	UPROPERTY()
 		FOnJumpCompleted OnJumpCompleted;
 
+	UPROPERTY(EditDefaultsOnly)
+		float RollDistance = 600.F;
+
+	UPROPERTY(EditDefaultsOnly)
+		float RollMontageCompletationRating = 0.65F;
+
+	
+
 protected:
 
 	UPROPERTY()
@@ -39,6 +48,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 		float NormalizedVelocity = 0.F;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UAnimMontage* RollMontage = nullptr;
+
 protected:
 
 	void SetupData();
@@ -47,6 +59,8 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 		void Broadcast_OnJumpCompleted() { OnJumpCompleted.Broadcast(); }
+
+	
 
 public:
 
@@ -58,4 +72,12 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void Jumping();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void Roll();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void UpdateRollAlpha(float InAlpha);
+
+	float GetRollMontageDuration() { return RollMontage->GetSectionLength(0); }
 };

@@ -13,15 +13,15 @@ ADoor::ADoor()
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>("BoxComponent");
 	RootComponent = BoxComponent;
-	BoxComponent->SetBoxExtent(FVector(100.f, 100.f, 200.f));
+	BoxComponent->SetBoxExtent(FVector(50.F, 15.F, 115.F));
 
 	SceneComponent = CreateDefaultSubobject<USceneComponent>("Pivot");
 	SceneComponent->SetupAttachment(RootComponent);
-	SceneComponent->SetRelativeLocation(FVector(100.f, 0.f, -200.f));
+	SceneComponent->SetRelativeLocation(FVector(40.F, 0.F, -115.F));
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
 	StaticMesh->SetupAttachment(SceneComponent);
-	StaticMesh->SetRelativeScale3D(FVector(2, 01, 4));
+	StaticMesh->SetRelativeLocation(FVector(0.F, -3.5F, 0.F));
 
 	static ConstructorHelpers::FObjectFinder<UDataTable>DataTable(TEXT("/Game/DataTables/DoorKeyDataTable.DoorKeyDataTable"));
 
@@ -61,6 +61,9 @@ void ADoor::OnConstruction(const FTransform & Transform)
 		DoorKeyDataTable->AddRow(DoorKeyName, DKS);
 	}
 	
+
+	DoorOpening = (int32)DOpening;
+
 }
 
 // Called when the game starts or when spawned
@@ -81,29 +84,41 @@ void ADoor::Tick(float DeltaTime)
 
 void ADoor::OpenDoor(APlayerPawn* PlayerPawn)
 {
-	
+	if (DoorKeyName == "NONE")
+	{
+		StartTimer();
+	}
 	/*const FDoorKeyStruct* DKS = DoorKeyDataTable->FindRow<FDoorKeyStruct>(DoorKeyName, DoorKeyName.ToString(), true);*/
 
-	for (auto Iter: PlayerPawn->MyKeyChain->CurrentKeyChain)
 
-	if (Iter->DoorKeyName == DoorKeyName)
+	for (auto Iter : PlayerPawn->MyKeyChain->CurrentKeyChain)
 	{
-		if (bIsLocked == true)
+		if (Iter != nullptr)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Yellow, "Door unlocked");
-			bIsLocked = false;
-			StartTimer();
-		}
-		else
-		{
-			StartTimer();
-		}
+			if (Iter->DoorKeyName == DoorKeyName)
+			{
+				if (bIsLocked == true)
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Yellow, "Door unlocked");
+					bIsLocked = false;
+					StartTimer();
+				}
+				else
+				{
+					StartTimer();
+				}
+			}
+			else
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Blue, "The Door is locked, you need the key");
+			}
+		}	
 	}
-	else
+
+	if (bIsLocked)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Blue, "The Door is locked, you need the key");
 	}
-		
 }
 
 void ADoor::CloseDoor(float DeltaTime)
@@ -143,9 +158,9 @@ void ADoor::UpdateTimer(float InStartTime)
 	float DeltaTime = CurrentTime - InStartTime;
 
 	FRotator RelativeRotation = SceneComponent->GetRelativeRotation();
-	FRotator FinalRotation = FRotator(0, 90, 0);
+	FRotator FinalRotation = FRotator(0, DoorOpening*90, 0);
 
-	if (RelativeRotation.Yaw < FinalRotation.Yaw)
+	if (FMath::Abs(RelativeRotation.Yaw) < FMath::Abs(FinalRotation.Yaw))
 	{
 		const FRotator SmoothRotation = FMath::RInterpTo(RelativeRotation, FinalRotation, DeltaTime, 0.5f);
 		SceneComponent->SetRelativeRotation(SmoothRotation);

@@ -41,6 +41,8 @@ void APlayerPawnController::SetupInputComponent()
 
 	InputComponent->BindAction("Jump", IE_Pressed, this, &APlayerPawnController::Jump);
 
+	InputComponent->BindAction("Roll", IE_Pressed, this, &APlayerPawnController::Roll);
+
 	InputComponent->BindAction("DropItem", IE_Pressed, this, &APlayerPawnController::DropItem);
 }
 
@@ -94,6 +96,14 @@ void APlayerPawnController::DropItem()
 	if(PlayerPawn != nullptr)
 	{
 		PlayerPawn->DropItem();
+	}
+}
+
+void APlayerPawnController::Roll()
+{
+	if (PlayerFSMComponent->GetCurrentStateEnum() == EPlayerPawnState::GROUNDED) 
+	{
+		PlayerFSMComponent->ChangeState(EPlayerPawnState::ROLL);
 	}
 }
 

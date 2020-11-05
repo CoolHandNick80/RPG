@@ -89,7 +89,7 @@ void UPPState_JUMP::SetJumpVelocity()
 	}
 	else
 	{
-		PlayerPawnMovementComponent->Velocity.Z = 4000.F;
+		PlayerPawnMovementComponent->Velocity.Z = 2000.F;
 		bIsJumping = true;
 
 	}

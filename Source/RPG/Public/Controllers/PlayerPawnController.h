@@ -55,6 +55,8 @@ protected:
 
 	void DropItem();
 
+	void Roll();
+
 	UFUNCTION()
 		void AssignGamplayCamera();
 };

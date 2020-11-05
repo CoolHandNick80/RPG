@@ -42,7 +42,7 @@ public:
 public:
 
 	UPROPERTY(EditDefaultsOnly)
-		float HLocation = 100.F;
+		float HLocation = 130.F;
 	
 	bool bKeyOwned = false;
 

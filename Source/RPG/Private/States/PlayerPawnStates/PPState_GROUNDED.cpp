@@ -74,7 +74,7 @@ void UPPState_GROUNDED::HandleGroundedMovement()
 {
 	if (PlayerPawn != nullptr && PlayerPawnMovementComponent != nullptr)
 	{
-		/*PlayerPawn->AddMovementInput(FVector::CrossProduct(GameplayCamera->GetActorForwardVector(), FVector(0, 0, -1)), PlayerPawnMovementComponent->MovementInputVector.Y);*/
+		
 		PlayerPawn->AddMovementInput(GameplayCamera->GetActorRightVector(), PlayerPawnMovementComponent->MovementInputVector.Y);
 		PlayerPawn->AddMovementInput(GameplayCamera->GetActorForwardVector(), PlayerPawnMovementComponent->MovementInputVector.X);
 	}

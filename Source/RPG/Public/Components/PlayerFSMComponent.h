@@ -14,6 +14,7 @@ class UPPState_NONE;
 class UPPState_GROUNDED;
 class UPPState_FALLING;
 class UPPState_JUMP;
+class UPPState_ROLL;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class RPG_API UPlayerFSMComponent : public UActorComponent
@@ -59,6 +60,9 @@ protected:
 
 	UPROPERTY()
 		UPPState_JUMP* State_JUMP = nullptr;
+
+	UPROPERTY()
+		UPPState_ROLL* State_ROLL = nullptr;
 
 	UPROPERTY(EditAnywhere)
 		bool bShowDebug = false;

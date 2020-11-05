@@ -15,6 +15,13 @@
 
 class APlayerPawn;
 
+UENUM()
+enum class EOpening : int32
+{
+	ClockWise = 1 UMETA(DisplayName = "ClockWise"),
+	CounterClockWise = -1 UMETA(DisplayName = "CounterClockWise")
+};
+
 UCLASS()
 class RPG_API ADoor : public AActor
 {
@@ -38,13 +45,13 @@ public:
 
 protected:
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		UBoxComponent* BoxComponent = nullptr;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		UStaticMeshComponent* StaticMesh = nullptr;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		USceneComponent* SceneComponent = nullptr;
 
 	FTimerHandle TimerHandle;
@@ -56,6 +63,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DoorKey)
 		FName DoorKeyName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		EOpening DOpening = EOpening::ClockWise;
+
+	UPROPERTY(EditAnywhere, meta = (ClampMin = -1, ClampMax = 1), BlueprintReadWrite)
+		int32 DoorOpening = (int32) DOpening;
 
 	UPROPERTY()
 		URPGGameInstance* GameInstance = nullptr;

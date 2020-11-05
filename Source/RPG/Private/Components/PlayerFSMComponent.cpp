@@ -6,6 +6,7 @@
 #include "States/PlayerPawnStates/PPState_GROUNDED.h"
 #include "States/PlayerPawnStates/PPState_FALLING.h"
 #include "States/PlayerPawnStates/PPState_JUMP.h"
+#include "States/PlayerPawnStates/PPState_ROLL.h"
 
 DEFINE_LOG_CATEGORY(PlayerFSMLog);
 
@@ -59,7 +60,9 @@ void UPlayerFSMComponent::ChangeState(EPlayerPawnState InNewState)
 	case EPlayerPawnState::JUMP:
 		NextState = State_JUMP;
 		break;
-
+	case EPlayerPawnState::ROLL:
+		NextState = State_ROLL;
+		break;
 	default:
 		break;
 	}
@@ -78,12 +81,14 @@ void UPlayerFSMComponent::SetupData()
 	State_GROUNDED = NewObject <UPPState_GROUNDED>(this);
 	State_FALLING = NewObject <UPPState_FALLING>(this);
 	State_JUMP = NewObject <UPPState_JUMP>(this);
+	State_ROLL = NewObject<UPPState_ROLL>(this);
 
 	// Add to States
 	States.Add(State_NONE);
 	States.Add(State_GROUNDED);
 	States.Add(State_FALLING);
 	States.Add(State_JUMP);
+	States.Add(State_ROLL);
 
 	// Initialize States
 	for (auto State : States)
